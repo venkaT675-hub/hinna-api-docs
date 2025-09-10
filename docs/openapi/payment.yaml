@@ -4,7 +4,6 @@ info:
   version: 1.0.0
   description: >
     Integration endpoints for the HINNA Payment System used by the User Service.
-    operationId, callbacks, deprecations, externalDocs, and vendor x-extensions are omitted.
 
 tags:
   - name: Auth
@@ -22,7 +21,6 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
   parameters:
     UserId:
       name: userId
@@ -56,11 +54,11 @@ security:
   - bearerAuth: []
 
 paths:
-  /api/v1/auth/service-token:
+  /auth/service-token:
     post:
       tags: [Auth]
       summary: Obtain a service token (JWT)
-      description: Returns a JWT for service-to-service authentication. The token is typically valid for 24 hours.
+      description: Returns a JWT for service-to-service authentication (typically valid for ~24 hours).
       requestBody:
         required: true
         content:
@@ -69,12 +67,8 @@ paths:
               type: object
               required: [clientId, clientSecret]
               properties:
-                clientId:
-                  type: string
-                  example: user-service
-                clientSecret:
-                  type: string
-                  example: s3cr3t
+                clientId: { type: string, example: user-service }
+                clientSecret: { type: string, example: s3cr3t }
       responses:
         "200":
           description: Token issued
@@ -84,13 +78,8 @@ paths:
                 type: object
                 required: [token, expiresAt]
                 properties:
-                  token:
-                    type: string
-                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
-                  expiresAt:
-                    type: string
-                    format: date-time
-                    example: 2025-05-01T00:00:00Z
+                  token: { type: string, example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... }
+                  expiresAt: { type: string, format: date-time, example: 2025-05-01T00:00:00Z }
         "400":
           description: Bad request
           content:
@@ -99,10 +88,10 @@ paths:
                 type: object
                 required: [status, message, timestamp]
                 properties:
-                  status: { type: integer, example: 400 }
-                  message: { type: string, example: "Bad Request" }
-                  details: { type: string, nullable: true, example: "Detailed error description" }
-                  timestamp: { type: string, format: date-time, example: "2025-04-24T14:32:25.123Z" }
+                  status:   { type: integer, example: 400 }
+                  message:  { type: string,  example: Bad Request }
+                  details:  { type: string, nullable: true, example: Detailed error description }
+                  timestamp:{ type: string, format: date-time, example: 2025-04-24T14:32:25.123Z }
         "401":
           description: Unauthorized
           content:
@@ -111,10 +100,10 @@ paths:
                 type: object
                 required: [status, message, timestamp]
                 properties:
-                  status: { type: integer, example: 401 }
-                  message: { type: string, example: "Unauthorized" }
-                  details: { type: string, nullable: true }
-                  timestamp: { type: string, format: date-time }
+                  status:   { type: integer, example: 401 }
+                  message:  { type: string,  example: Unauthorized }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
         "500":
           description: Server error
           content:
@@ -123,10 +112,10 @@ paths:
                 type: object
                 required: [status, message, timestamp]
                 properties:
-                  status: { type: integer, example: 500 }
-                  message: { type: string, example: "Internal Server Error" }
-                  details: { type: string, nullable: true }
-                  timestamp: { type: string, format: date-time }
+                  status:   { type: integer, example: 500 }
+                  message:  { type: string,  example: Internal Server Error }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
 
   /account/verify/{userId}:
     get:
@@ -144,12 +133,9 @@ paths:
                 type: object
                 required: [exists, active]
                 properties:
-                  exists: { type: boolean, example: true }
-                  active: { type: boolean, example: true }
-                  accountType:
-                    type: string
-                    description: Type of account when applicable
-                    example: STANDARD
+                  exists:      { type: boolean, example: true }
+                  active:      { type: boolean, example: true }
+                  accountType: { type: string,  example: STANDARD }
         "401":
           description: Unauthorized
           content:
@@ -158,10 +144,10 @@ paths:
                 type: object
                 required: [status, message, timestamp]
                 properties:
-                  status: { type: integer, example: 401 }
-                  message: { type: string, example: "Unauthorized" }
-                  details: { type: string, nullable: true }
-                  timestamp: { type: string, format: date-time }
+                  status:   { type: integer, example: 401 }
+                  message:  { type: string,  example: Unauthorized }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
         "404":
           description: Not found
           content:
@@ -170,10 +156,10 @@ paths:
                 type: object
                 required: [status, message, timestamp]
                 properties:
-                  status: { type: integer, example: 404 }
-                  message: { type: string, example: "Not Found" }
-                  details: { type: string, nullable: true }
-                  timestamp: { type: string, format: date-time }
+                  status:   { type: integer, example: 404 }
+                  message:  { type: string,  example: Not Found }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
         "500":
           description: Server error
           content:
@@ -182,10 +168,287 @@ paths:
                 type: object
                 required: [status, message, timestamp]
                 properties:
-                  status: { type: integer, example: 500 }
-                  message: { type: string, example: "Internal Server Error" }
-                  details: { type: string, nullable: true }
-                  timestamp: { type: string, format: date-time }
+                  status:   { type: integer, example: 500 }
+                  message:  { type: string,  example: Internal Server Error }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
 
-  # You can add the rest similarly without using components.schemas:
-  # /account/link, /user/{userId}/payments, /user/{userId}/payment-methods, /user/{userId}/balance, /health
+  /account/link:
+    post:
+      tags: [Account]
+      summary: Link a user account
+      description: Links a user to a payment account using an external reference.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [externalRef]
+              properties:
+                externalRef: { type: string, example: usr_12345 }
+                accountType: { type: string, example: STANDARD }
+      responses:
+        "200":
+          description: Account link result
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [linked]
+                properties:
+                  linked:    { type: boolean, example: true }
+                  accountId: { type: string,  example: acc_987654 }
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, message, timestamp]
+                properties:
+                  status:   { type: integer, example: 400 }
+                  message:  { type: string,  example: Bad Request }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, message, timestamp]
+                properties:
+                  status:   { type: integer, example: 401 }
+                  message:  { type: string,  example: Unauthorized }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
+        "409":
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, message, timestamp]
+                properties:
+                  status:   { type: integer, example: 409 }
+                  message:  { type: string,  example: Conflict }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, message, timestamp]
+                properties:
+                  status:   { type: integer, example: 500 }
+                  message:  { type: string,  example: Internal Server Error }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
+
+  /user/{userId}/payments:
+    get:
+      tags: [User]
+      summary: List a user's payments
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Size'
+      responses:
+        "200":
+          description: List of payments
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [page, size, total, items]
+                properties:
+                  page:  { type: integer, example: 0 }
+                  size:  { type: integer, example: 20 }
+                  total: { type: integer, example: 3 }
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      required: [id, amount, currency, status, createdAt]
+                      properties:
+                        id:        { type: string,  example: pay_123 }
+                        amount:    { type: number, format: float, example: 42.50 }
+                        currency:  { type: string,  example: AUD }
+                        status:    { type: string,  example: COMPLETED }
+                        createdAt: { type: string,  format: date-time }
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, message, timestamp]
+                properties:
+                  status:   { type: integer, example: 401 }
+                  message:  { type: string,  example: Unauthorized }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, message, timestamp]
+                properties:
+                  status:   { type: integer, example: 404 }
+                  message:  { type: string,  example: Not Found }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, message, timestamp]
+                properties:
+                  status:   { type: integer, example: 500 }
+                  message:  { type: string,  example: Internal Server Error }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
+
+  /user/{userId}/payment-methods:
+    get:
+      tags: [User]
+      summary: List a user's payment methods
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        "200":
+          description: Payment methods
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      required: [id, type]
+                      properties:
+                        id:        { type: string,  example: pm_abc }
+                        type:      { type: string,  example: card }
+                        brand:     { type: string,  example: visa }
+                        last4:     { type: string,  example: "4242" }
+                        expMonth:  { type: integer, example: 12 }
+                        expYear:   { type: integer, example: 2030 }
+                        default:   { type: boolean, example: true }
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, message, timestamp]
+                properties:
+                  status:   { type: integer, example: 401 }
+                  message:  { type: string,  example: Unauthorized }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, message, timestamp]
+                properties:
+                  status:   { type: integer, example: 404 }
+                  message:  { type: string,  example: Not Found }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, message, timestamp]
+                properties:
+                  status:   { type: integer, example: 500 }
+                  message:  { type: string,  example: Internal Server Error }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
+
+  /user/{userId}/balance:
+    get:
+      tags: [User]
+      summary: Get a user's balance
+      parameters:
+        - $ref: '#/components/parameters/UserId'
+      responses:
+        "200":
+          description: Balance
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [available, pending, currency]
+                properties:
+                  available: { type: number, format: float, example: 123.45 }
+                  pending:   { type: number, format: float, example: 10.00 }
+                  currency:  { type: string,  example: AUD }
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, message, timestamp]
+                properties:
+                  status:   { type: integer, example: 401 }
+                  message:  { type: string,  example: Unauthorized }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, message, timestamp]
+                properties:
+                  status:   { type: integer, example: 404 }
+                  message:  { type: string,  example: Not Found }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status, message, timestamp]
+                properties:
+                  status:   { type: integer, example: 500 }
+                  message:  { type: string,  example: Internal Server Error }
+                  details:  { type: string, nullable: true }
+                  timestamp:{ type: string, format: date-time }
+
+  /health:
+    get:
+      tags: [System]
+      summary: Health check
+      responses:
+        "200":
+          description: Health status
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [status]
+                properties:
+                  status:    { type: string, example: UP }
+                  version:   { type: string, example: 1.0.0 }
+                  timestamp: { type: string, format: date-time }
